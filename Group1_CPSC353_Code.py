@@ -93,7 +93,12 @@ def oneTimePadDecr(encr_mess, key):
 
     # This for loop 
     for i in range(length):                 
-        
+        # make sure the key is right
+        if key[i] == " " or ( ord(key[i]) > 64 and ord(key[i]) < 91):
+            pass
+        else:
+            return "There was an issue. Your key contains an unacceptable character. It should only be comprised of spaces and capital letters"
+
         # If the "letter" of the encrypted message is a space
         if encr[i] == " ":
             letterDecr = (26 - ord(key[i]) + 65) % 27 + 65      # The space value starts at 26, we subtract the value of the key which is the ord()-65 (double negative makes a positive so we add 65), mod 27 to bring it back to our range of 0-26, then add 65 to bring it back to ASCII
@@ -103,12 +108,17 @@ def oneTimePadDecr(encr_mess, key):
                 decr.append(chr(letterDecr))        # note: letterDecr is actually the number value of the letter
         
         # If the "letter" of the encrypted message is actually a letter
-        else:
+        elif ord(encr[i]) > 64 and ord(encr[i]) < 91:
             letterDecr = (( ord(encr[i]) - 65 - ord(key[i]) + 65) ) % 27 + 65      # This will subtract the base value A from each letter, subtract the value of the simplified letters together, and mod 27 to get values between 0 and 26, add 65 to get it back to the ASCII table leter
             if letterDecr == 91:             # If the letter is supposed to be a space it will be 91 right now, we must correct that
                 decr.append(chr(32))
             else:
                 decr.append(chr(letterDecr))
+        
+        # If the "letter" doesn't fit the specifications
+        else:
+            return "There was an issue. Your encrypted message contains an unacceptable character. It should only be comprised of spaces and capital letters."
+
     return "".join(decr)        # This is the pretty string version of the decr list
 
 
